@@ -1,0 +1,40 @@
+.author__container {
+  margin-top: 20px;
+
+  display: flex;
+  align-items: center;
+  column-gap: 14px;
+}
+
+.author__thumbnail {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.author__info-box {
+  height: 48px;
+
+  display: flex;
+  flex-direction: column;
+  row-gap: 2px;
+  justify-content: flex-end;
+}
+
+.author__info-name-job {
+  span {
+    color: rgb(78, 89, 104);
+    font-size: 17px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+}
+
+.author__info-created-at {
+  span {
+    color: rgb(139, 149, 161);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+}

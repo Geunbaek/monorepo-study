@@ -1,6 +1,7 @@
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
 const { FederatedTypesPlugin } = require("@module-federation/typescript");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 const Dotenv = require("dotenv-webpack");
 const deps = require("./package.json").dependencies;
@@ -55,6 +56,14 @@ module.exports = (_, argv) => ({
   },
 
   plugins: [
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: "./src/assets",
+          to: "assets",
+        },
+      ],
+    }),
     new ModuleFederationPlugin(federationConfig),
     new FederatedTypesPlugin({ federationConfig }),
     new HtmlWebPackPlugin({

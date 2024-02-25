@@ -1,0 +1,47 @@
+.sitemap__container {
+  margin-bottom: 90px;
+
+  width: 100%;
+  display: flex;
+
+  @media (max-width: 640px) {
+    flex-direction: column;
+    row-gap: 40px;
+
+    margin-bottom: 40px;
+  }
+}
+
+.sitemap__menu__container {
+  &:last-child {
+    flex-grow: 1;
+  }
+
+  width: 170px;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.sitemap__menu__title {
+  span {
+    color: #333d4b;
+    font-weight: bold;
+    font-size: 15px;
+    line-height: 30px;
+  }
+}
+
+.sitemap__menu__item__inner {
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  span {
+    color: #6b7684;
+    font-size: 15px;
+    line-height: 30px;
+  }
+}

@@ -3,24 +3,36 @@
   top: 0;
   left: 0;
   right: 0;
+
   display: flex;
   justify-content: center;
+
   height: 60px;
+  background-color: #ffffff;
+  border-bottom: 1px solid rgba(0, 27, 55, 0.1);
 }
 
 .header__container {
+  margin: auto;
+
   width: 100%;
   max-width: 1140px;
+}
+
+.header__container__inner {
+  width: 92%;
+
+  margin: 0 auto;
 
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
 }
 
 .header__container__logo {
   width: 110px;
   height: 20px;
-  background-image: url(../../../assets/svgs/logo-toss.svg);
+  background-image: url(/src/assets/svgs/logo-toss.svg);
   background-repeat: no-repeat;
 }
 
@@ -32,15 +44,20 @@
 
 .header__container__nav__item {
   padding: 12px 10px;
-  outline: none;
   border: none;
-  background-color: #ffffff;
+  background-color: transparent;
   border-radius: 8px;
   cursor: pointer;
 
   display: flex;
   align-items: center;
   justify-content: center;
+
+  span {
+    font-size: 15px;
+    line-height: 20px;
+    color: #4e5968;
+  }
 }
 
 .header__container__nav__item:hover {
@@ -49,9 +66,14 @@
 
 .header__container__nav__item--active {
   padding: 7px 12px;
-  border-radius: 8px;
+  border-radius: 6px;
   background-color: #3182f6;
-  color: #ffffff;
+  span {
+    color: #f9fafb;
+    font-size: 14px;
+    line-height: 18px;
+    font-weight: 600;
+  }
 }
 
 .header__container__nav__item--active:hover {

@@ -1,0 +1,30 @@
+.detail-post-section__container {
+  width: 100%;
+  max-width: 700px;
+  margin: 36px auto;
+}
+
+.detail-post-section__container__inner {
+  width: 92%;
+
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+}
+
+.detail-post-section__thumbnail {
+  border-radius: 12px;
+  width: 100%;
+}
+
+.detail-post-section__title {
+  margin-top: 20px;
+  h1 {
+    color: rgb(51, 61, 75);
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1.25;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
+}

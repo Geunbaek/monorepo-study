@@ -10,6 +10,7 @@ const federationConfig = {
   filename: "remoteEntry.js",
   remotes: {},
   exposes: {
+    "./component": "./src/lib/component",
     "./router": "./src/lib/router",
     "./virtualDOM": "./src/lib/virtualDOM",
   },

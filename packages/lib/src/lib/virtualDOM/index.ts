@@ -1,10 +1,16 @@
+import Component from "../component";
+
 export type CustomNode = {
   tagName: string;
-  props?: Record<string, string>;
+  props?: Record<string, unknown>;
   children?: (CustomNode | string | number)[];
+  component?: InstanceType<typeof Component>;
 };
 
-const createDOM = (node: CustomNode | string | number) => {
+const createDOM = (
+  node: CustomNode | string | number,
+  eventFuncSet: Set<Function>
+) => {
   if (typeof node === "string" || typeof node === "number") {
     return document.createTextNode(node.toString());
   }
@@ -12,40 +18,40 @@ const createDOM = (node: CustomNode | string | number) => {
   const tagName = node.tagName;
   const props = node.props || {};
   const children = node.children || [];
+  const component = node.component;
 
   const el = document.createElement(tagName);
 
+  if (component) {
+    eventFuncSet.add(component.setEvent);
+  }
+
   for (const key in props) {
-    el.setAttribute(key, props[key]);
+    const value = props[key];
+
+    if (typeof value === "string") {
+      el.setAttribute(key, value);
+    }
   }
 
   for (const child of children) {
-    el.appendChild(createDOM(child));
+    const childNode = createDOM(child, eventFuncSet);
+    el.appendChild(childNode);
   }
 
   return el;
 };
 
 export type CustomElement = {
-  tagName:
-    | ((
-        props?: Record<string, string>,
-        children?: (CustomElement | string | number)[]
-      ) => CustomNode | string | number)
-    | string;
-  props?: Record<string, string>;
+  tagName: InstanceType<typeof Component> | string;
+  props?: Record<string, unknown>;
   children?: (CustomElement | string | number)[];
 };
 
-const createElement = (
-  node: CustomElement | string | number
-): CustomNode | string | number => {
-  if (typeof node === "string" || typeof node === "number") {
-    return node;
-  }
-
-  if (typeof node.tagName === "function") {
-    return node.tagName(node.props, node.children);
+const createElement = (node: CustomElement): CustomNode => {
+  if (node.tagName instanceof Component) {
+    node.tagName._props = node.props;
+    return { ...node.tagName.getElement(), component: node.tagName };
   }
 
   const tagName = node.tagName || "";
@@ -56,8 +62,8 @@ const createElement = (
 };
 
 const isChangedDOM = (
-  virtualDOM: HTMLElement | Text,
-  newVirtualDOM: HTMLElement | Text
+  virtualDOM: Element | HTMLElement | Text,
+  newVirtualDOM: DocumentFragment | HTMLElement | Text
 ) => {
   if (virtualDOM instanceof Text && newVirtualDOM instanceof HTMLElement) {
     return true;
@@ -67,11 +73,7 @@ const isChangedDOM = (
     return true;
   }
 
-  if (
-    virtualDOM instanceof Text &&
-    newVirtualDOM instanceof Text &&
-    virtualDOM.textContent !== newVirtualDOM.textContent
-  ) {
+  if (virtualDOM.textContent !== newVirtualDOM.textContent) {
     return true;
   }
 
@@ -99,8 +101,8 @@ const isChangedDOM = (
 };
 
 const hasEqualKey = (
-  virtualDOM: HTMLElement | Text,
-  newVirtualDOM: HTMLElement | Text
+  virtualDOM: Element | HTMLElement | Text,
+  newVirtualDOM: DocumentFragment | HTMLElement | Text
 ) => {
   const virtualDOMKey = (virtualDOM as HTMLElement).getAttribute("key");
   const newVirtualDOMKey = (newVirtualDOM as HTMLElement).getAttribute("key");
@@ -117,11 +119,11 @@ const hasEqualKey = (
 };
 
 const reconsile = (
-  parentDOM: HTMLElement,
-  virtualDOM: HTMLElement | Text | undefined,
-  newVirtualDOM: HTMLElement | Text | undefined
+  parentDOM: DocumentFragment | Element | HTMLElement,
+  virtualDOM: Element | HTMLElement | Text | undefined,
+  newVirtualDOM: DocumentFragment | HTMLElement | Text | undefined
 ) => {
-  if (!virtualDOM || !newVirtualDOM) {
+  if (!virtualDOM && !newVirtualDOM) {
     return;
   }
 
@@ -132,6 +134,10 @@ const reconsile = (
 
   if (virtualDOM && !newVirtualDOM) {
     virtualDOM.remove();
+    return;
+  }
+
+  if (!virtualDOM || !newVirtualDOM) {
     return;
   }
 
@@ -162,17 +168,25 @@ const reconsile = (
   }
 };
 
-const render = ($target: HTMLElement) => {
-  let virtualDOM: HTMLElement | Text | null = null;
-  return (newVirtualElement: CustomNode | string | number) => {
-    const newVirtualDOM = createDOM(newVirtualElement);
-    if (virtualDOM === null) {
-      virtualDOM = newVirtualDOM;
-      $target.appendChild(newVirtualDOM);
-    } else {
-      reconsile($target, virtualDOM, newVirtualDOM);
-    }
+const createVirtualDOM = ($target: DocumentFragment | HTMLElement) => {
+  let component: Component | null = null;
+  const render = (newComponent?: Component) => {
+    requestAnimationFrame(() => {
+      if (newComponent) {
+        component = newComponent;
+      }
+
+      if (!component) return;
+
+      const newVirtualElement = component.getElement();
+      const eventFuncSet: Set<Function> = new Set();
+      const newVirtualDOM = createDOM(newVirtualElement, eventFuncSet);
+      reconsile($target, $target.children[0], newVirtualDOM);
+      eventFuncSet.forEach((fn) => fn());
+    });
   };
+
+  return { render };
 };
 
-export { createElement, render };
+export { createElement, createVirtualDOM };

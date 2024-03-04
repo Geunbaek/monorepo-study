@@ -6,9 +6,9 @@ const getPosts = http.get("/posts", () => {
   return HttpResponse.json(DUMMY);
 });
 
-const getPostById = http.get("/posts:id", ({ params }) => {
+const getPostById = http.get("/posts/:id", ({ params }) => {
   const filteredPosts = DUMMY.filter(
-    (post) => post.id.toString() !== params.id
+    (post) => post.id.toString() === params.id
   );
   return HttpResponse.json(filteredPosts);
 });

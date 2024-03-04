@@ -1,8 +1,10 @@
-import type { CustomNode } from "../virtualDOM";
-declare const Router: (renderer: (page: CustomNode | string | number) => void) => {
+import Component from "../component";
+type Renderer = (component?: Component) => void;
+export declare const to: (path: string, state?: Record<string, unknown>) => void;
+declare const Router: (render: Renderer) => {
     init: () => any;
     to: (path: string, state?: Record<string, unknown>) => void;
-    add: (path: string, getPage: (props?: Record<string, string>) => CustomNode | string | number) => any;
-    setDefault: (getPage: (props?: Record<string, string>) => CustomNode | string | number) => any;
+    add: (path: string, component: new (render: Renderer) => Component) => any;
+    setDefault: (component: new (render: Renderer) => Component) => any;
 };
 export default Router;

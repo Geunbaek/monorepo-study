@@ -1,0 +1,6 @@
+/*! For license information please see 200.js.LICENSE.txt */
+"use strict";(self.webpackChunkdesign_system=self.webpackChunkdesign_system||[]).push([[200],{0:(e,r,t)=>{var s=t(44),o=Symbol.for("react.element"),a=(Symbol.for("react.fragment"),Object.prototype.hasOwnProperty),n=s.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentOwner,p={key:!0,ref:!0,__self:!0,__source:!0};r.jsx=function(e,r,t){var s,y={},l=null,f=null;for(s in void 0!==t&&(l=""+t),void 0!==r.key&&(l=""+r.key),void 0!==r.ref&&(f=r.ref),r)a.call(r,s)&&!p.hasOwnProperty(s)&&(y[s]=r[s]);if(e&&e.defaultProps)for(s in r=e.defaultProps)void 0===y[s]&&(y[s]=r[s]);return{$$typeof:o,type:e,key:l,ref:f,props:y,_owner:n.current}}},135:(e,r,t)=>{e.exports=t(0)},200:(e,r,t)=>{t.r(r),t.d(r,{default:()=>a});var s=t(135),o=(t(44),t(628));const a=({className:e,text:r,typography:t})=>(0,s.jsx)(n,{className:e,$typography:t,children:(0,s.jsx)("span",{children:r})}),n=t.n(o)().div`
+  span {
+    ${({theme:e,$typography:r})=>e.typograph[r]}
+  }
+`}}]);
